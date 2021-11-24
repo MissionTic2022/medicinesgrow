@@ -3,9 +3,11 @@ package com.grow.medicines.services;
 import com.grow.medicines.exceptions.InsufficientAmountException;
 import com.grow.medicines.exceptions.MedicineNotFoundException;
 import com.grow.medicines.models.Medicine;
+import com.grow.medicines.models.RequestMedicine;
 import com.grow.medicines.repositories.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,27 +54,27 @@ public class MedicineService {
         return  medicine;
     }
 
-    public Medicine addAmountMedicine(Integer amount, String id) {
-        Medicine medicine = medicineRepository.findById(id)
+    public Medicine addAmountMedicine(RequestMedicine requestMedicine) {
+        Medicine medicine = medicineRepository.findById(requestMedicine.getId())
                 .orElseThrow(() -> new MedicineNotFoundException(
-                        "No se encontró un medicamento con el id: " + id));
+                        "No se encontró un medicamento con el id: " + requestMedicine.getId()));
 
-        medicine.setAmount(medicine.getAmount() + amount);
+        medicine.setAmount(medicine.getAmount() + requestMedicine.getAmount());
 
         return medicineRepository.save(medicine);
     }
 
-    public Medicine reduceAmountMedicine(Integer amount, String id) {
+    public Medicine reduceAmountMedicine(RequestMedicine requestMedicine) {
 
-        Medicine medicine = medicineRepository.findById(id)
+        Medicine medicine = medicineRepository.findById(requestMedicine.getId())
                 .orElseThrow(() -> new MedicineNotFoundException(
-                        "No se encontró un medicamento con el id: " + id));
+                        "No se encontró un medicamento con el id: " + requestMedicine.getId()));
 
-        if (medicine.getAmount() < amount) {
+        if (medicine.getAmount() < requestMedicine.getAmount()) {
             throw new InsufficientAmountException("La cantidad de medicina solicitada es mayor que hay en stock");
         }
 
-        medicine.setAmount(medicine.getAmount() - amount);
+        medicine.setAmount(medicine.getAmount() - requestMedicine.getAmount());
 
         return medicineRepository.save(medicine);
     }

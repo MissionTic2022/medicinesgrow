@@ -1,6 +1,7 @@
 package com.grow.medicines.controllers;
 
 import com.grow.medicines.models.Medicine;
+import com.grow.medicines.models.RequestMedicine;
 import com.grow.medicines.services.MedicineService;
 
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +38,14 @@ public class MedicineController {
         return medicineService.updateMedicine(medicine, id);
     }
 
-    @PutMapping("/medicines/addamount/{id}")
-    Medicine addAmountMedicine(@RequestBody Integer amount, @PathVariable String id) {
-        return medicineService.addAmountMedicine(amount, id);
+    @PutMapping("/medicines/addamount")
+    Medicine addAmountMedicine(@RequestBody RequestMedicine requestMedicine) {
+        return medicineService.addAmountMedicine(requestMedicine);
     }
 
-    @PutMapping("/medicines/reduceamount/{id}")
-    Medicine reduceAmountMedicine(@RequestBody Integer amount, @PathVariable String id) {
-        return medicineService.reduceAmountMedicine(amount, id);
+    @PutMapping("/medicines/reduceamount")
+    Medicine reduceAmountMedicine(@RequestBody RequestMedicine requestMedicine) {
+        return medicineService.reduceAmountMedicine(requestMedicine);
     }
 
     @DeleteMapping("/medicines/{id}")
